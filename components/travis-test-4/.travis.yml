@@ -1,0 +1,30 @@
+language: node_js
+node_js: stable
+sudo: required
+dist: trusty
+addons:
+  firefox: latest
+  apt:
+    sources:
+    - google-chrome
+    packages:
+    - google-chrome-stable
+
+cache:
+  directories:
+  - node_modules
+  - "$HOME/.cache/bower"
+
+install:
+- npm install -g bower polymer-cli
+- npm install
+- bower install
+script:
+- xvfb-run polymer test
+after_success:
+- if [ ${TRAVIS_PULL_REQUEST} = "false" ] && [ "$TRAVIS_BRANCH" = "master" ]; then
+  bower install -s oneezy/build-tools && ./bower_components/build-tools/gpages_build.sh;
+  fi
+env:
+  global:
+    secure: ZwNuFN1cryC5dff4c3a1qePkoRZoug+HDiN55dFATTt7Opk20C8SgO+RGEWqYWelFkUN2jhAyoJ91GFMxOyYqbqZP+mQfBaFWgBZoKIcGcDur5in4z6ZaWfw65X03K0HIaaKaunpO4C1d/d++zMhqvudhaJ4JgXJXts5cUdmXGxCIEhKE+mH5d76VK4fbpyrtpewllqHeaiIE88oFZ0L8xQP8K7SUXukvVmE1Re0Kl0UjXjsdSUftcj+gnOcBxqGjVlSjQ9Bk0zmPWbz2Nh+2nHYo8Gx6AjNjUX+DMa7hNWSOLgXNXehA+FlMB0RRXtVezOWxZf55R+NmWOT+Dc4W1+StKr2MM7nlET5Zr9xZE2PUPCLJ52xLe+fUjBKogVAS/FnzxcxPbLQJlxigQ7lmTdnHNcf8ZJU3F9Qx6WbVo+DAdni7FAmOnZPDayVJRjVry8UWYWhLdp/L5LtZR7cwI7OYRlnAsMVqXgON+M0OHPIufMjbEN3iCAxWRkmJbjtCLWe9dYDeb69sEFfCJ2OaLdoH4MzA+Am8qpwMhC8wpQbniCEAcqkogf0D3zGN/VupJEkvzx4MN3Sx420fzw8r0pk60SnFbFeqRzPC+mGtYdst6njiVkwRqySR/1nqHxbz3vTgwug+fI5eb5ETWq/9uY4E3zGjcB2bHHKqCPdwEE=
